@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "electron": "^40.2.1"
+  },
+  "scripts": {
+    "start": "electron ."
+  },
+  "main": "window.js"
+}

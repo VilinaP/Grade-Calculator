@@ -1,0 +1,23 @@
+:root{
+    --purple: #3B1E54;
+    --light-purple: #9B7EBD;
+    --pink: #D4BEE4;
+    --white: #EEEEEE;
+}
+
+*{
+    font-family: "Pixelify Sans";
+    color: var(--purple)
+}
+
+html{
+    background-color: var(--purple);
+}
+
+h1{
+    color: var(--white)
+}
+
+main{
+    background-image: url("backgroud.png");
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <title>Grade Calculator</title>
+</head>
+<body>
+    <header>
+        <h1>Grade Calculator</h1>
+        <section class="templates">
+            <template>
+                <div>
+                    <input type="text" placeholder="Grade Category">
+                    <!-- needs to add up to a hundred!!! -->
+                    <input type="number" placeholder="100">
+                    <p>%</p>
+                </div>
+            </template>
+            <template>
+                <div>
+                    <select name="category" ></select>
+                    <input type="number">
+                    <p>%</p>
+                </div>
+            </template>
+        </section>
+    </header>
+
+    <main>
+        <section class="category-weight">
+            <h2>Category Weight</h2>
+            <div class="scroll-category">
+                <input type="text" placeholder="Grade Category">
+                <input type="number" placeholder="100">
+            </div>
+            <button type="button" class="add-category">Add</button>
+            <button type="button" class="delete-category">Delete</button>
+        </section>
+        <section class="calculator">
+            <h2>Category</h2>
+            <h2>Grade</h2>
+            <div class="scroll-calculator"></div>
+            <button type="button">Add</button>
+            <button type="button">Delete</button>
+        </section>
+        <section class="final">
+            <h2>Your f inal grade:</h2>
+            <p></p>
+            <p>%</p>
+        </section>
+    </main>
+</body>
+</html>
