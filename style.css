@@ -7,24 +7,59 @@
 
 @font-face {
     font-family: Pixel;
-    src: url(assets/alagard.ttf);
+    src: url(assets/PixelOperatorMono.ttf);
 }
 
 *{
     font-family: "Pixel";
     color: var(--purple);
-    overflow: hidden;
+    box-sizing: border-box;
 }
 
 html{
     background-color: var(--purple);
+    overflow: hidden;
+    margin: 0;
+    padding: 10px;
+}
+
+
+.menu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  -webkit-app-region: drag;
+  user-select: none;
+}
+
+
+.menu button {
+  -webkit-app-region: no-drag;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.menu button img {
+  display: block;
 }
 
 h1{
-    color: var(--white);
+  margin: 0 auto 0 0;
+  padding: 0;
+  color: var(--white);
+  white-space: nowrap;
+  font-size: 20pt;
 }
 
 main{
     background-image: url("assets/backgroud.png");
     background-repeat: no-repeat;
+    background-size: cover;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+
 }

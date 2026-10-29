@@ -1,4 +1,5 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
+const path = require("path");
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -7,17 +8,25 @@ function createWindow() {
     resizable: false,
     maximizable: false,
     fullscreenable: false,
-    frame: false, 
-    // autoHideMenuBar: true, (command to fide the menu bar if frame is set to true)
+    frame: false,
     transparent: false,
     icon: "assets/icon.png",
     webPreferences: {
-      contextIsolation: true
+      contextIsolation: true,
+      preload: path.join(__dirname, "preload.js")
     }
   });
 
   win.loadFile("index.html");
 }
+
+ipcMain.on("window:minimize", (event) => {
+  BrowserWindow.fromWebContents(event.sender).minimize();
+});
+
+ipcMain.on("window:close", (event) => {
+  BrowserWindow.fromWebContents(event.sender).close();
+});
 
 app.whenReady().then(createWindow);
 
