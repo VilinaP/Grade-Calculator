@@ -2,14 +2,15 @@ const { app, BrowserWindow } = require("electron");
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 500,
-    height: 600,
+    width: 400,
+    height: 500,
     resizable: false,
     maximizable: false,
     fullscreenable: false,
     frame: false, 
+    // autoHideMenuBar: true, (command to fide the menu bar if frame is set to true)
     transparent: false,
-    icon: "icon.png",
+    icon: "assets/icon.png",
     webPreferences: {
       contextIsolation: true
     }

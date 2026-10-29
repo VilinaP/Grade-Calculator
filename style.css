@@ -5,9 +5,15 @@
     --white: #EEEEEE;
 }
 
+@font-face {
+    font-family: Pixel;
+    src: url(assets/alagard.ttf);
+}
+
 *{
-    font-family: "Pixelify Sans";
-    color: var(--purple)
+    font-family: "Pixel";
+    color: var(--purple);
+    overflow: hidden;
 }
 
 html{
@@ -15,9 +21,10 @@ html{
 }
 
 h1{
-    color: var(--white)
+    color: var(--white);
 }
 
 main{
-    background-image: url("backgroud.png");
+    background-image: url("assets/backgroud.png");
+    background-repeat: no-repeat;
 }
