@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,49 +8,55 @@
     <script src="script.js" defer></script>
     <title>Grade Calculator</title>
 </head>
+
 <body>
     <div class="menu">
         <h1>Grade Calculator</h1>
-        <button aria-label="fold window button"><img src="assets/fold.png" alt="fold window" width="25"></button>
-        <button aria-label="close window button"><img src="assets/exit.png" alt="close window" width="25"></button>
+        <button type="button" aria-label="fold window button"><img src="assets/fold.png" alt="fold window" width="25"></button>
+        <button type="button" aria-label="close window button"><img src="assets/exit.png" alt="close window" width="25"></button>
     </div>
     <header>
-        <section class="templates">
-            <template>
-                <div>
-                    <input type="text" placeholder="Grade Category">
-                    <!-- needs to add up to a hundred!!! -->
-                    <input type="number" placeholder="100">
-                    <p>%</p>
-                </div>
-            </template>
-            <template>
-                <div>
-                    <select name="category" ></select>
-                    <input type="number">
-                    <p>%</p>
-                </div>
-            </template>
-        </section>
+        <template>
+            <div class="grade-category-item">
+                <!-- to do: make it so that is turned into the input after click. -->
+                <input type="text" placeholder="Grade Category Name">
+                <!-- all categories need to add up to a hundred!!! -->
+                <input type="number" placeholder="100">
+                <p>%</p>
+            </div>
+
+            <div class="grade-item">
+                <!-- to do: make it so that is turned into the input after click. -->
+                <input type="text" placeholder="Note">
+                <select name="category"></select>
+                <input type="number">
+                <p>%</p>
+            </div>
+        </template>
+
+
     </header>
 
     <main>
+        <section class="class">
+            <h2>Class</h2>
+            <select name="subject" id="pick-class"></select>
+            <button type="button">Add Class</button>
+            <button type="button">Delete this Class</button>
+        </section>
         <section class="category-weight">
-            <h2>Category Weight</h2>
-            <div class="scroll-category">
-                <input type="text" placeholder="Grade Category">
-                <input type="number" placeholder="100">
-            </div>
+            <h2>Grade Categories</h2>
+            <div class="scroll-category"></div>
             <button type="button" class="add-category">Add</button>
             <button type="button" class="delete-category">Delete</button>
         </section>
         <section class="calculator">
-            <h2>Category</h2>
-            <h2>Grade</h2>
-            <div class="scroll-calculator"></div>
+            <h2>Grades</h2>
+            <div class="scroll-grade"></div>
             <button type="button">Add</button>
             <button type="button">Delete</button>
         </section>
+        <button type="button">Calculate My Grade</button>
         <section class="final">
             <h2>Your final grade:</h2>
             <p></p>
@@ -57,4 +64,5 @@
         </section>
     </main>
 </body>
+
 </html>
