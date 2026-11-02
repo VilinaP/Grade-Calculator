@@ -11,7 +11,6 @@ function registerCalculateHandlers() {
     }
 
     try {
-      // One query, one consistent snapshot: category count, total weight, and weighted grade.
       // A category with no grades has no average, so it counts as 0.
       const { recordset } = await getPool()
         .request()

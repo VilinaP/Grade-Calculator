@@ -9,7 +9,6 @@ function assertId(value) {
   if (typeof value !== 'string' || !ID_PATTERN.test(value)) throw new Error('Invalid id');
 }
 
-// Throws on tampered input; returns { reason } for ordinary user mistakes
 function cleanFields(rawName, percentage) {
   if (typeof rawName !== 'string' || typeof percentage !== 'number') {
     throw new Error('Invalid category data');
@@ -33,7 +32,7 @@ function toResult(row) {
     case 'over':
       return { saved: false, reason: 'over', remaining: Number((100 - row.used).toFixed(2)) };
     default:
-      return { saved: false, reason: row.status }; // duplicate, no_class, not_found
+      return { saved: false, reason: row.status }; 
   }
 }
 

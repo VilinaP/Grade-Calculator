@@ -1,3 +1,5 @@
+// Copy this file to database.js and fill in your information
+
 const sql = require('mssql');
 
 // don't push on github, database connection

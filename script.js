@@ -134,7 +134,7 @@ function renderCategories() {
       row.setAttribute('aria-pressed', String(selected));
 
       const name = document.createElement('span');
-      name.textContent = c.name; // textContent only, never innerHTML
+      name.textContent = c.name;
       const pct = document.createElement('span');
       pct.textContent = `${c.percentage}%`;
 
