@@ -80,3 +80,62 @@ main{
   flex-basis: 100%;
   margin: 0;
 }
+
+[hidden]{
+  display: none !important;
+}
+
+.scroll-category{
+  max-height: 90px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.category-row{
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--pink);
+  cursor: pointer;
+  text-align: left;
+}
+
+.category-row span:first-child{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.category-row.selected{
+  background-color: var(--light-purple);
+}
+
+.category-form{
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  margin: 8px 0;
+}
+
+.category-form input[type="text"]{
+  flex: 1;
+  min-width: 0;
+}
+
+.category-form input[type="number"]{
+  width: 70px;
+}
+
+.category-form p{
+  margin: 0;
+}
+
+.category-message{
+  margin: 4px 0 0;
+}

@@ -10,3 +10,12 @@ contextBridge.exposeInMainWorld('classes', {
   create: (name) => ipcRenderer.invoke('classes:create', String(name)),
   remove: (classId) => ipcRenderer.invoke('classes:delete', String(classId)),
 });
+
+contextBridge.exposeInMainWorld('categories', {
+  getByClass: (classId) => ipcRenderer.invoke('categories:getByClass', String(classId)),
+  create: (classId, name, percentage) =>
+    ipcRenderer.invoke('categories:create', String(classId), String(name), Number(percentage)),
+  update: (categoryId, name, percentage) =>
+    ipcRenderer.invoke('categories:update', String(categoryId), String(name), Number(percentage)),
+  remove: (categoryId) => ipcRenderer.invoke('categories:delete', String(categoryId)),
+});

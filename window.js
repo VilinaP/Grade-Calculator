@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const db = require('./database');
 const { registerClassHandlers } = require('./js_handlers/class');
+const { registerCategoryHandlers } = require('./js_handlers/category');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -41,6 +42,7 @@ app.whenReady().then(async () => {
     return;
   }
   registerClassHandlers();
+  registerCategoryHandlers();
   createWindow();
 });
 
