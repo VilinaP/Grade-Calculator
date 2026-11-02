@@ -34,3 +34,7 @@ contextBridge.exposeInMainWorld('grades', {
     ),
   remove: (gradeId) => ipcRenderer.invoke('grades:delete', String(gradeId)),
 });
+
+contextBridge.exposeInMainWorld('finalGradeApi', {
+  calculate: (classId) => ipcRenderer.invoke('calculate:final', String(classId)),
+});

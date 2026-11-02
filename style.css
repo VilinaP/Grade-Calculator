@@ -197,3 +197,15 @@ main::-webkit-scrollbar-thumb{
 .grade-message{
   margin: 4px 0 0;
 }
+
+.category-total{
+  margin: 6px 0 0;
+}
+
+.category-total.warn{
+  font-weight: bold;
+}
+
+.calc-message{
+  margin: 4px 0 8px;
+}

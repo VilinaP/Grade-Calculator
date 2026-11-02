@@ -4,6 +4,7 @@ const db = require('./database');
 const { registerClassHandlers } = require('./js_handlers/class');
 const { registerCategoryHandlers } = require('./js_handlers/category');
 const { registerGradeHandlers } = require('./js_handlers/grade');
+const { registerCalculateHandlers } = require('./js_handlers/calculate');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -45,6 +46,7 @@ app.whenReady().then(async () => {
   registerClassHandlers();
   registerCategoryHandlers();
   registerGradeHandlers();
+  registerCalculateHandlers();
   createWindow();
 });
 

@@ -22,6 +22,7 @@ async function loadClasses(selectId) {
     classSelect.replaceChildren(...list.map((c) => new Option(c.name, c.id)));
     if (selectId && list.some((c) => c.id === selectId)) classSelect.value = selectId;
     deleteClassBtn.disabled = list.length === 0;
+    calculateBtn.disabled = list.length === 0;
   } catch (err) {
     console.error(err);
     showClassMessage('Could not load classes.');
@@ -80,6 +81,7 @@ classSelect.addEventListener('change', onClassChanged);
 
 // ---------- Category section ----------
 const categoryList = document.getElementById('category-list');
+const categoryTotal = document.getElementById('category-total');
 const categoryNameInput = document.getElementById('category-name');
 const categoryPercentInput = document.getElementById('category-percent');
 const saveCategoryBtn = document.getElementById('save-category');
@@ -89,6 +91,7 @@ const categoryMessage = document.getElementById('category-message');
 
 // NOTE: not named "categories", because preload.js already exposes window.categories
 let categoryItems = [];
+let categoryTotalReady = false; // false until the current class's categories have loaded
 let selectedCategoryId = null; // null = add mode, otherwise edit mode
 let categoryLoadToken = 0; // ignores out-of-date responses when switching classes quickly
 
@@ -104,6 +107,21 @@ function updateCategoryControls() {
   deleteCategoryBtn.disabled = selectedCategoryId === null;
   saveCategoryBtn.textContent = selectedCategoryId === null ? 'Add' : 'Update';
   cancelCategoryBtn.hidden = selectedCategoryId === null;
+}
+
+// Live total line under the category list (display only; the main process checks again)
+function updateCategoryTotal() {
+  if (!classSelect.value || !categoryTotalReady) {
+    categoryTotal.textContent = '';
+    categoryTotal.classList.remove('warn');
+    return;
+  }
+  const hundredths = categoryItems.reduce((sum, c) => sum + Math.round(c.percentage * 100), 0);
+  const ok = hundredths === 10000;
+  categoryTotal.textContent = ok
+    ? `Total: ${hundredths / 100}%`
+    : `Total: ${hundredths / 100}% (must be 100%)`;
+  categoryTotal.classList.toggle('warn', !ok);
 }
 
 function renderCategories() {
@@ -126,6 +144,7 @@ function renderCategories() {
       return row;
     })
   );
+  updateCategoryTotal();
 }
 
 function resetCategoryForm() {
@@ -153,9 +172,11 @@ function selectCategory(id) {
 
 async function loadCategories() {
   const token = ++categoryLoadToken;
+  clearFinalResult(); // categories changed, so any shown result is out of date
   const classId = classSelect.value;
   if (!classId) {
     categoryItems = [];
+    categoryTotalReady = false;
     resetCategoryForm();
     renderGradeCategoryOptions();
     return;
@@ -164,6 +185,7 @@ async function loadCategories() {
     const list = await window.categories.getByClass(classId);
     if (token !== categoryLoadToken) return; // a newer load replaced this one
     categoryItems = list;
+    categoryTotalReady = true;
     renderCategories();
     renderGradeCategoryOptions(); // the grade dropdown follows the category list
   } catch (err) {
@@ -175,7 +197,9 @@ async function loadCategories() {
 function onClassChanged() {
   showCategoryMessage('');
   showGradeMessage('');
+  clearFinalResult();
   categoryItems = [];
+  categoryTotalReady = false;
   gradeItems = [];
   resetCategoryForm();
   renderGradeCategoryOptions();
@@ -366,6 +390,7 @@ function selectGrade(id) {
 
 async function loadGrades() {
   const token = ++gradeLoadToken;
+  clearFinalResult(); // grades changed, so any shown result is out of date
   const classId = classSelect.value;
   if (!classId) {
     gradeItems = [];
@@ -471,6 +496,62 @@ deleteGradeBtn.addEventListener('click', deleteGrade);
     if (e.key === 'Enter') saveGrade();
   })
 );
+
+// ---------- Final grade ----------
+const calculateBtn = document.getElementById('calculate');
+const calcMessage = document.getElementById('calc-message');
+const finalGradeValue = document.getElementById('final-grade');
+const finalPercent = document.getElementById('final-percent');
+
+function showCalcMessage(text) {
+  calcMessage.textContent = text;
+}
+
+// Hides the shown result and any calculation message
+function clearFinalResult() {
+  finalGradeValue.textContent = '';
+  finalPercent.hidden = true;
+  showCalcMessage('');
+}
+
+function calcFailureText(result) {
+  switch (result.reason) {
+    case 'no_categories':
+      return 'Add grade categories first.';
+    case 'weights':
+      return `Categories add up to ${result.total}%, not 100%. Fix them to calculate.`;
+    default:
+      return 'Could not calculate the grade.';
+  }
+}
+
+async function calculateGrade() {
+  const classId = classSelect.value;
+  if (!classId) {
+    showCalcMessage('Pick or add a class first.');
+    return;
+  }
+
+  calculateBtn.disabled = true; // prevents double-clicks
+  try {
+    const result = await window.finalGradeApi.calculate(classId);
+    clearFinalResult();
+    if (result.calculated) {
+      finalGradeValue.textContent = result.grade.toFixed(2);
+      finalPercent.hidden = false;
+    } else {
+      showCalcMessage(calcFailureText(result));
+    }
+  } catch (err) {
+    console.error(err);
+    clearFinalResult();
+    showCalcMessage('Could not calculate the grade.');
+  } finally {
+    calculateBtn.disabled = !classSelect.value;
+  }
+}
+
+calculateBtn.addEventListener('click', calculateGrade);
 
 updateCategoryControls();
 updateGradeControls();
