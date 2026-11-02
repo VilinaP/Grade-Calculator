@@ -63,9 +63,17 @@
         </section>
         <section class="calculator">
             <h2>Grades</h2>
-            <div class="scroll-grade"></div>
-            <button type="button">Add</button>
-            <button type="button">Delete</button>
+            <div class="scroll-grade" id="grade-list"></div>
+            <div class="grade-form">
+                <input type="text" id="grade-name" maxlength="200" placeholder="Assignment name" aria-label="Assignment name">
+                <select id="grade-category" aria-label="Grade category"></select>
+                <input type="number" id="grade-score" min="0" max="200" step="0.01" placeholder="100" aria-label="Score">
+                <p>%</p>
+            </div>
+            <button type="button" id="save-grade">Add</button>
+            <button type="button" id="cancel-grade" hidden>Cancel</button>
+            <button type="button" id="delete-grade">Delete</button>
+            <p id="grade-message" class="grade-message" role="status"></p>
         </section>
         <button type="button">Calculate My Grade</button>
         <section class="final">

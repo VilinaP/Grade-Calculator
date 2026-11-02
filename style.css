@@ -20,6 +20,15 @@ html{
     background-color: var(--purple);
     margin: 0;
     padding: 10px;
+    height: 100%;
+}
+
+body{
+  margin: 0;
+  padding: 8px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 
@@ -27,6 +36,7 @@ html{
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
   -webkit-app-region: drag;
   user-select: none;
 }
@@ -54,6 +64,9 @@ h1{
 }
 
 main{
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
     background-image: url("assets/backgroud.png");
     background-repeat: no-repeat;
     background-size: cover;
@@ -61,6 +74,19 @@ main{
     padding: 10px;
     border-radius: 10px;
 
+}
+
+main::-webkit-scrollbar{
+  width: 8px;
+}
+
+main::-webkit-scrollbar-track{
+  background: transparent;
+}
+
+main::-webkit-scrollbar-thumb{
+  background-color: var(--light-purple);
+  border-radius: 4px;
 }
 
 .final{
@@ -85,7 +111,8 @@ main{
   display: none !important;
 }
 
-.scroll-category{
+.scroll-category,
+.scroll-grade{
   max-height: 90px;
   overflow-y: auto;
   display: flex;
@@ -93,7 +120,8 @@ main{
   gap: 4px;
 }
 
-.category-row{
+.category-row,
+.grade-row{
   display: flex;
   justify-content: space-between;
   gap: 10px;
@@ -106,24 +134,44 @@ main{
   text-align: left;
 }
 
-.category-row span:first-child{
+.category-row span:first-child,
+.grade-row span:first-child{
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.category-row.selected{
+.grade-row span:first-child{
+  flex: 1;
+  min-width: 0;
+}
+
+.grade-category-label{
+  max-width: 35%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.grade-score-label{
+  flex-shrink: 0;
+}
+
+.category-row.selected,
+.grade-row.selected{
   background-color: var(--light-purple);
 }
 
-.category-form{
+.category-form,
+.grade-form{
   display: flex;
   gap: 5px;
   align-items: center;
   margin: 8px 0;
 }
 
-.category-form input[type="text"]{
+.category-form input[type="text"],
+.grade-form input[type="text"]{
   flex: 1;
   min-width: 0;
 }
@@ -132,10 +180,20 @@ main{
   width: 70px;
 }
 
-.category-form p{
+.grade-form input[type="number"]{
+  width: 60px;
+}
+
+.grade-form select{
+  width: 100px;
+}
+
+.category-form p,
+.grade-form p{
   margin: 0;
 }
 
-.category-message{
+.category-message,
+.grade-message{
   margin: 4px 0 0;
 }

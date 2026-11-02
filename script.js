@@ -26,7 +26,7 @@ async function loadClasses(selectId) {
     console.error(err);
     showClassMessage('Could not load classes.');
   }
-  onClassChanged(); // the selected class may have changed, so refresh categories
+  onClassChanged(); // the selected class may have changed, so refresh categories and grades
 }
 
 async function addClass() {
@@ -157,6 +157,7 @@ async function loadCategories() {
   if (!classId) {
     categoryItems = [];
     resetCategoryForm();
+    renderGradeCategoryOptions();
     return;
   }
   try {
@@ -164,6 +165,7 @@ async function loadCategories() {
     if (token !== categoryLoadToken) return; // a newer load replaced this one
     categoryItems = list;
     renderCategories();
+    renderGradeCategoryOptions(); // the grade dropdown follows the category list
   } catch (err) {
     console.error(err);
     showCategoryMessage('Could not load categories.');
@@ -172,9 +174,14 @@ async function loadCategories() {
 
 function onClassChanged() {
   showCategoryMessage('');
+  showGradeMessage('');
   categoryItems = [];
+  gradeItems = [];
   resetCategoryForm();
+  renderGradeCategoryOptions();
+  resetGradeForm();
   loadCategories();
+  loadGrades();
 }
 
 async function saveCategory() {
@@ -206,6 +213,7 @@ async function saveCategory() {
       showCategoryMessage('');
       resetCategoryForm();
       await loadCategories();
+      await loadGrades(); // a renamed category changes the label on its grades
     } else {
       showCategoryMessage(categoryFailureText(result));
     }
@@ -244,6 +252,7 @@ async function deleteCategory() {
       showCategoryMessage('');
       resetCategoryForm();
       await loadCategories();
+      await loadGrades(); // its grades were deleted along with it
     }
   } catch (err) {
     console.error(err);
@@ -263,5 +272,206 @@ deleteCategoryBtn.addEventListener('click', deleteCategory);
   })
 );
 
+// ---------- Grade section ----------
+const gradeList = document.getElementById('grade-list');
+const gradeNameInput = document.getElementById('grade-name');
+const gradeCategorySelect = document.getElementById('grade-category');
+const gradeScoreInput = document.getElementById('grade-score');
+const saveGradeBtn = document.getElementById('save-grade');
+const cancelGradeBtn = document.getElementById('cancel-grade');
+const deleteGradeBtn = document.getElementById('delete-grade');
+const gradeMessage = document.getElementById('grade-message');
+
+// NOTE: not named "grades", because preload.js already exposes window.grades
+let gradeItems = [];
+let selectedGradeId = null; // null = add mode, otherwise edit mode
+let gradeLoadToken = 0; // ignores out-of-date responses when switching classes quickly
+
+function showGradeMessage(text) {
+  gradeMessage.textContent = text;
+}
+
+function updateGradeControls() {
+  const hasCategories = categoryItems.length > 0;
+  gradeNameInput.disabled = !hasCategories;
+  gradeCategorySelect.disabled = !hasCategories;
+  gradeScoreInput.disabled = !hasCategories;
+  saveGradeBtn.disabled = !hasCategories;
+  deleteGradeBtn.disabled = selectedGradeId === null;
+  saveGradeBtn.textContent = selectedGradeId === null ? 'Add' : 'Update';
+  cancelGradeBtn.hidden = selectedGradeId === null;
+}
+
+function renderGradeCategoryOptions() {
+  const previous = gradeCategorySelect.value;
+  if (categoryItems.length === 0) {
+    gradeCategorySelect.replaceChildren(new Option('No categories', ''));
+  } else {
+    gradeCategorySelect.replaceChildren(...categoryItems.map((c) => new Option(c.name, c.id)));
+    if (categoryItems.some((c) => c.id === previous)) gradeCategorySelect.value = previous;
+  }
+  updateGradeControls();
+}
+
+function renderGrades() {
+  gradeList.replaceChildren(
+    ...gradeItems.map((g) => {
+      const row = document.createElement('button');
+      row.type = 'button';
+      row.className = 'grade-row';
+      const selected = g.id === selectedGradeId;
+      row.classList.toggle('selected', selected);
+      row.setAttribute('aria-pressed', String(selected));
+
+      const name = document.createElement('span');
+      name.textContent = g.name; // textContent only, never innerHTML
+      const category = document.createElement('span');
+      category.className = 'grade-category-label';
+      category.textContent = g.categoryName;
+      const score = document.createElement('span');
+      score.className = 'grade-score-label';
+      score.textContent = `${g.score}%`;
+
+      row.append(name, category, score);
+      row.addEventListener('click', () => selectGrade(g.id));
+      return row;
+    })
+  );
+}
+
+function resetGradeForm() {
+  selectedGradeId = null;
+  gradeNameInput.value = '';
+  gradeScoreInput.value = '';
+  // the category dropdown is left alone, so several grades can be added to one category
+  updateGradeControls();
+  renderGrades();
+}
+
+function selectGrade(id) {
+  if (selectedGradeId === id) {
+    resetGradeForm(); // clicking the selected row again deselects it
+    return;
+  }
+  const grade = gradeItems.find((g) => g.id === id);
+  if (!grade) return;
+  selectedGradeId = id;
+  gradeNameInput.value = grade.name;
+  gradeCategorySelect.value = grade.categoryId;
+  gradeScoreInput.value = grade.score;
+  showGradeMessage('');
+  updateGradeControls();
+  renderGrades();
+}
+
+async function loadGrades() {
+  const token = ++gradeLoadToken;
+  const classId = classSelect.value;
+  if (!classId) {
+    gradeItems = [];
+    resetGradeForm();
+    return;
+  }
+  try {
+    const list = await window.grades.getByClass(classId);
+    if (token !== gradeLoadToken) return; // a newer load replaced this one
+    gradeItems = list;
+    if (selectedGradeId !== null && !gradeItems.some((g) => g.id === selectedGradeId)) {
+      resetGradeForm(); // the selected grade no longer exists
+    } else {
+      renderGrades();
+    }
+  } catch (err) {
+    console.error(err);
+    showGradeMessage('Could not load grades.');
+  }
+}
+
+async function saveGrade() {
+  const categoryId = gradeCategorySelect.value;
+  if (!categoryId) {
+    showGradeMessage('Add a grade category first.');
+    return;
+  }
+
+  const name = gradeNameInput.value.trim();
+  const score = gradeScoreInput.valueAsNumber; // NaN when empty
+
+  if (!name) {
+    showGradeMessage('Enter an assignment name.');
+    gradeNameInput.focus();
+    return;
+  }
+  if (Number.isNaN(score)) {
+    showGradeMessage('Enter a score.');
+    gradeScoreInput.focus();
+    return;
+  }
+
+  saveGradeBtn.disabled = true; // prevents double-submits
+  try {
+    const result =
+      selectedGradeId === null
+        ? await window.grades.create(categoryId, name, score)
+        : await window.grades.update(selectedGradeId, categoryId, name, score);
+
+    if (result.saved) {
+      showGradeMessage('');
+      resetGradeForm();
+      await loadGrades();
+    } else {
+      showGradeMessage(gradeFailureText(result));
+    }
+  } catch (err) {
+    console.error(err);
+    showGradeMessage('Could not save the grade.');
+  } finally {
+    updateGradeControls();
+  }
+}
+
+function gradeFailureText(result) {
+  switch (result.reason) {
+    case 'empty':
+      return 'Enter an assignment name.';
+    case 'bad_score':
+      return 'Score must be 0 to 200, with at most 2 decimals.';
+    case 'no_category':
+      return 'That category no longer exists.';
+    case 'not_found':
+      return 'That grade or category no longer exists.';
+    default:
+      return 'Could not save the grade.';
+  }
+}
+
+async function deleteGrade() {
+  if (selectedGradeId === null) return;
+  try {
+    const { deleted } = await window.grades.remove(selectedGradeId);
+    if (deleted) {
+      showGradeMessage('');
+      resetGradeForm();
+      await loadGrades();
+    }
+  } catch (err) {
+    console.error(err);
+    showGradeMessage('Could not delete the grade.');
+  }
+}
+
+saveGradeBtn.addEventListener('click', saveGrade);
+cancelGradeBtn.addEventListener('click', () => {
+  showGradeMessage('');
+  resetGradeForm();
+});
+deleteGradeBtn.addEventListener('click', deleteGrade);
+[gradeNameInput, gradeScoreInput].forEach((input) =>
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') saveGrade();
+  })
+);
+
 updateCategoryControls();
+updateGradeControls();
 loadClasses();

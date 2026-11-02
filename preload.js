@@ -19,3 +19,18 @@ contextBridge.exposeInMainWorld('categories', {
     ipcRenderer.invoke('categories:update', String(categoryId), String(name), Number(percentage)),
   remove: (categoryId) => ipcRenderer.invoke('categories:delete', String(categoryId)),
 });
+
+contextBridge.exposeInMainWorld('grades', {
+  getByClass: (classId) => ipcRenderer.invoke('grades:getByClass', String(classId)),
+  create: (categoryId, name, score) =>
+    ipcRenderer.invoke('grades:create', String(categoryId), String(name), Number(score)),
+  update: (gradeId, categoryId, name, score) =>
+    ipcRenderer.invoke(
+      'grades:update',
+      String(gradeId),
+      String(categoryId),
+      String(name),
+      Number(score)
+    ),
+  remove: (gradeId) => ipcRenderer.invoke('grades:delete', String(gradeId)),
+});
