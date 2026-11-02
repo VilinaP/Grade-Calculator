@@ -5,7 +5,8 @@ contextBridge.exposeInMainWorld('windowControls', {
   close: () => ipcRenderer.send('window:close'),
 });
 
-contextBridge.exposeInMainWorld('api', {
-  listNotes: () => ipcRenderer.invoke('notes:list'),
-  addNote: (text) => ipcRenderer.invoke('notes:add', text),
+contextBridge.exposeInMainWorld('classes', {
+  getAll: () => ipcRenderer.invoke('classes:getAll'),
+  create: (name) => ipcRenderer.invoke('classes:create', String(name)),
+  remove: (classId) => ipcRenderer.invoke('classes:delete', String(classId)),
 });

@@ -71,6 +71,12 @@ main{
 
 .class{
   display: flex;
+  flex-wrap: wrap;
   gap: 15px;
   align-items: center;
+}
+
+.class-message{
+  flex-basis: 100%;
+  margin: 0;
 }

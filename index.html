@@ -3,6 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
@@ -41,8 +43,10 @@
         <section class="class">
             <h2>Class</h2>
             <select name="subject" id="pick-class"></select>
-            <button type="button">Add Class</button>
-            <button type="button">Delete this Class</button>
+            <button type="button" id="delete-class">Delete this Class</button>
+            <input type="text" id="new-class-name" maxlength="200" placeholder="New class name" aria-label="New class name">
+            <button type="button" id="add-class">Add Class</button>
+            <p id="class-message" class="class-message" role="status"></p>
         </section>
         <section class="category-weight">
             <h2>Grade Categories</h2>

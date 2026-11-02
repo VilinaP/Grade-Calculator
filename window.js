@@ -1,6 +1,7 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const db = require('./database');
+const { registerClassHandlers } = require('./js_handlers/class');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -13,9 +14,15 @@ function createWindow() {
     icon: path.join(__dirname, 'assets', 'icon.png'),
     webPreferences: {
       contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true,
       preload: path.join(__dirname, 'preload.js'),
     },
   });
+
+  // The app never needs to open new windows or leave index.html
+  win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+  win.webContents.on('will-navigate', (e) => e.preventDefault());
 
   win.loadFile('index.html');
 }
@@ -24,16 +31,16 @@ function createWindow() {
 ipcMain.on('window:minimize', (e) => BrowserWindow.fromWebContents(e.sender)?.minimize());
 ipcMain.on('window:close', (e) => BrowserWindow.fromWebContents(e.sender)?.close());
 
-// Database
-ipcMain.handle('notes:list', () => db.listNotes());
-ipcMain.handle('notes:add', (_e, text) => db.addNote(text));
-
 app.whenReady().then(async () => {
   try {
     await db.connect();
   } catch (err) {
     console.error('Database connection failed:', err.message);
+    dialog.showErrorBox('Database error', 'Could not connect to the database.');
+    app.quit();
+    return;
   }
+  registerClassHandlers();
   createWindow();
 });
 

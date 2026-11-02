@@ -14,24 +14,11 @@ let pool;
 
 async function connect() {
   pool = await sql.connect(config);
-  await pool.request().query(`
-    IF OBJECT_ID('notes') IS NULL
-    CREATE TABLE notes (
-      id   INT IDENTITY(1,1) PRIMARY KEY,
-      text NVARCHAR(500) NOT NULL
-    )`);
 }
 
-async function listNotes() {
-  const { recordset } = await pool.request().query('SELECT * FROM notes');
-  return recordset;
+function getPool() {
+  if (!pool) throw new Error('Database not connected');
+  return pool;
 }
 
-async function addNote(text) {
-  await pool
-    .request()
-    .input('text', sql.NVarChar(500), text)
-    .query('INSERT INTO notes (text) VALUES (@text)');
-}
-
-module.exports = { connect, listNotes, addNote };
+module.exports = { connect, getPool };
