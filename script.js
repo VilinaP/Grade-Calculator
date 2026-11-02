@@ -89,7 +89,6 @@ const cancelCategoryBtn = document.getElementById('cancel-category');
 const deleteCategoryBtn = document.getElementById('delete-category');
 const categoryMessage = document.getElementById('category-message');
 
-// NOTE: not named "categories", because preload.js already exposes window.categories
 let categoryItems = [];
 let categoryTotalReady = false; // false until the current class's categories have loaded
 let selectedCategoryId = null; // null = add mode, otherwise edit mode

@@ -29,9 +29,10 @@ body{
   height: 100%;
   display: flex;
   flex-direction: column;
+  gap: 3px;
 }
 
-
+/* styles for title of the app annd menu buttons  */
 .menu {
   display: flex;
   align-items: center;
@@ -55,6 +56,8 @@ body{
   display: block;
 }
 
+/* title styles */
+
 h1{
   margin: 0 auto 0 0;
   padding: 0;
@@ -63,30 +66,40 @@ h1{
   font-size: 20pt;
 }
 
+h2{
+  margin: 10px;
+}
+
 main{
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
     background-image: url("assets/backgroud.png");
     background-repeat: no-repeat;
     background-size: cover;
     margin-top: 10px;
     padding: 10px;
     border-radius: 10px;
-
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
 }
 
-main::-webkit-scrollbar{
-  width: 8px;
+button, select, input{
+  background-color: var(--pink);
+  border-color: var(--purple);
+  padding: 5px 10px 5px;
+  border-radius: 5px;
 }
 
-main::-webkit-scrollbar-track{
-  background: transparent;
+
+select{
+  text-align: center;
+  text-align-last: center;
+  text-align: center;
 }
 
-main::-webkit-scrollbar-thumb{
-  background-color: var(--light-purple);
-  border-radius: 4px;
+
+input{
+  background-color: var(--white);
+  width: 50vw;
 }
 
 .final{
@@ -95,10 +108,15 @@ main::-webkit-scrollbar-thumb{
   align-items: center;
 }
 
+[hidden]{
+  display: none !important;
+}
+
+/* styles for class section  */
+
 .class{
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
   align-items: center;
 }
 
@@ -107,18 +125,47 @@ main::-webkit-scrollbar-thumb{
   margin: 0;
 }
 
-[hidden]{
-  display: none !important;
+#pick-class{
+  appearance: none;
+  -webkit-appearance: none;
+  margin-left: 10px;
 }
 
+.new-class{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* scroll for category and grade sections */
 .scroll-category,
 .scroll-grade{
-  max-height: 90px;
+  max-height: 100px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  padding: 10px;
+  background-color: var(--pink);
+  border-radius: 5px;
 }
+.scroll-category::-webkit-scrollbar,
+.scroll-grade::-webkit-scrollbar{
+  width: 3px;
+}
+
+.scroll-category::-webkit-scrollbar-track,
+.scroll-grade::-webkit-scrollbar-track{
+  background: transparent;
+}
+
+.scroll-category::-webkit-scrollbar-thumb,
+.scroll-grade::-webkit-scrollbar-thumb{
+  background-color: var(--light-purple);
+  border-radius: 4px;
+}
+
+/* scrollable sections */
 
 .category-row,
 .grade-row{
@@ -129,9 +176,16 @@ main::-webkit-scrollbar-thumb{
   padding: 4px 8px;
   border: none;
   border-radius: 5px;
-  background-color: var(--pink);
+  background-color: var(--purple);
   cursor: pointer;
   text-align: left;
+}
+
+.category-row,
+.grade-row,
+.category-row span,
+.grade-row span {
+  color: var(--white); 
 }
 
 .category-row span:first-child,
@@ -208,4 +262,21 @@ main::-webkit-scrollbar-thumb{
 
 .calc-message{
   margin: 4px 0 8px;
+}
+
+.category-buttons, .grade-buttons{
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.category-buttons button, .grade-buttons button{
+  width: 47%;
+}
+
+#calculate{
+  width: 100%;
+  margin-top: 15px;
+  font-weight: bold;
+  padding: 10px;
 }

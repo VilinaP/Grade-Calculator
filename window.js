@@ -9,7 +9,7 @@ const { registerCalculateHandlers } = require('./js_handlers/calculate');
 function createWindow() {
   const win = new BrowserWindow({
     width: 400,
-    height: 500,
+    height: 770,
     resizable: false,
     maximizable: false,
     fullscreenable: false,
@@ -28,6 +28,7 @@ function createWindow() {
   win.webContents.on('will-navigate', (e) => e.preventDefault());
 
   win.loadFile('index.html');
+  // win.webContents.openDevTools({ mode: 'detach' }); //if what console 
 }
 
 // Window buttons: act on the window that sent the message

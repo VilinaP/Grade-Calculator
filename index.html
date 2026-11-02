@@ -12,40 +12,24 @@
 </head>
 
 <body>
-    <div class="menu">
-        <h1>Grade Calculator</h1>
-        <button type="button" aria-label="fold window button"><img src="assets/fold.png" alt="fold window" width="25"></button>
-        <button type="button" aria-label="close window button"><img src="assets/exit.png" alt="close window" width="25"></button>
-    </div>
-    <header>
-        <template>
-            <div class="grade-category-item">
-                <!-- to do: make it so that is turned into the input after click. -->
-                <input type="text" placeholder="Grade Category Name">
-                <!-- all categories need to add up to a hundred!!! -->
-                <input type="number" placeholder="100">
-                <p>%</p>
-            </div>
 
-            <div class="grade-item">
-                <!-- to do: make it so that is turned into the input after click. -->
-                <input type="text" placeholder="Note">
-                <select name="category"></select>
-                <input type="number">
-                <p>%</p>
-            </div>
-        </template>
-
-
+    <header class="menu">
+            <h1>Grade Calculator</h1>
+            <button type="button" aria-label="fold window button"><img src="assets/fold.png" alt="fold window" width="25"></button>
+            <button type="button" aria-label="close window button"><img src="assets/exit.png" alt="close window" width="25"></button>
     </header>
 
     <main>
         <section class="class">
+            <div class="new-class">
+                <input type="text" id="new-class-name" maxlength="200" placeholder="New class name" aria-label="New class name">
+                <button type="button" id="add-class">Add Class</button>
+            </div>
             <h2>Class</h2>
-            <select name="subject" id="pick-class"></select>
-            <button type="button" id="delete-class">Delete this Class</button>
-            <input type="text" id="new-class-name" maxlength="200" placeholder="New class name" aria-label="New class name">
-            <button type="button" id="add-class">Add Class</button>
+            <div>
+                <select name="subject" id="pick-class"></select>
+                <button type="button" id="delete-class">Delete</button>
+            </div>
             <p id="class-message" class="class-message" role="status"></p>
         </section>
         <section class="category-weight">
@@ -57,9 +41,11 @@
                 <input type="number" id="category-percent" min="0" max="100" step="0.01" placeholder="100" aria-label="Category percentage">
                 <p>%</p>
             </div>
-            <button type="button" class="add-category" id="save-category">Add</button>
-            <button type="button" id="cancel-category" hidden>Cancel</button>
-            <button type="button" class="delete-category" id="delete-category">Delete</button>
+            <div class="category-buttons">
+                <button type="button" class="add-category" id="save-category">Add</button>
+                <button type="button" id="cancel-category" hidden>Cancel</button>
+                <button type="button" class="delete-category" id="delete-category">Delete</button>
+            </div>
             <p id="category-message" class="category-message" role="status"></p>
         </section>
         <section class="calculator">
@@ -71,9 +57,11 @@
                 <input type="number" id="grade-score" min="0" max="200" step="0.01" placeholder="100" aria-label="Score">
                 <p>%</p>
             </div>
-            <button type="button" id="save-grade">Add</button>
-            <button type="button" id="cancel-grade" hidden>Cancel</button>
-            <button type="button" id="delete-grade">Delete</button>
+            <div class="grade-buttons">
+                <button type="button" id="save-grade">Add</button>
+                <button type="button" id="cancel-grade" hidden>Cancel</button>
+                <button type="button" id="delete-grade">Delete</button>
+            </div>
             <p id="grade-message" class="grade-message" role="status"></p>
         </section>
         <button type="button" id="calculate">Calculate My Grade</button>
